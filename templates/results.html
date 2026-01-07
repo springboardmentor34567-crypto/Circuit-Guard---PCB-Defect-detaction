@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Results - PCB Defect Detection{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="hero-section">
+        <h1 class="hero-title">📊 Processing Results</h1>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="summary-section">
+        <div class="summary-card">
+            <div class="summary-icon">📷</div>
+            <div class="summary-content">
+                <h3>{{ summary.processed_count }}</h3>
+                <p>Images Processed</p>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon">🎯</div>
+            <div class="summary-content">
+                <h3>{{ summary.total_detections }}</h3>
+                <p>Total Detections</p>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon">📈</div>
+            <div class="summary-content">
+                <h3>{{ "%.1f"|format(summary.avg_detections) }}</h3>
+                <p>Avg Detections/Image</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download ZIP Button -->
+    <div class="card">
+        <h2>💾 Download Results</h2>
+        <button id="download-zip-btn" class="btn btn-primary btn-large">
+            📦 Download ZIP (All Annotated Images + Annotation Files)
+        </button>
+        <p class="info-text">The ZIP file contains:<br>
+        - <code>images/</code> folder: All annotated images (with bounding boxes)<br>
+        - <code>labels/</code> folder: YOLO format annotation files (.txt) for each image</p>
+    </div>
+
+    <!-- Results Carousel -->
+    <div class="card">
+        <h2>🖼️ Results: Original vs Annotated + Annotations</h2>
+        <p class="caption">Use navigation buttons (◀️ ▶️) to browse each image's original, annotated view, and its YOLO annotations.</p>
+        
+        <div id="results-carousel" class="results-carousel">
+            <div class="carousel-header">
+                <h3 id="current-image-name">Loading...</h3>
+                <span id="carousel-counter">1 / {{ results|length }}</span>
+            </div>
+
+            <div class="carousel-navigation">
+                <button id="prev-btn" class="carousel-btn">◀️</button>
+                <div class="carousel-content">
+                    <div class="image-comparison">
+                        <div class="image-panel">
+                            <h4>Original</h4>
+                            <div class="image-container">
+                                <img id="original-image" src="" alt="Original image">
+                            </div>
+                        </div>
+                        <div class="image-panel">
+                            <h4>Annotated</h4>
+                            <div class="image-container">
+                                <img id="annotated-image" src="" alt="Annotated image">
+                            </div>
+                            <button id="download-img-btn" class="btn btn-download">📥 Download Annotated Image</button>
+                        </div>
+                    </div>
+                    <div class="annotations-section">
+                        <h4>📄 YOLO Annotations</h4>
+                        <div id="annotations-content" class="annotations-content"></div>
+                        <button id="download-txt-btn" class="btn btn-download">📥 Download .txt Annotation</button>
+                    </div>
+                </div>
+                <button id="next-btn" class="carousel-btn">▶️</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script type="application/json" id="results-data">
+    {{ results|tojson }}
+</script>
+<script>
+    window.results = JSON.parse(document.getElementById('results-data').textContent);
+</script>
+<script src="{{ url_for('static', filename='js/results.js') }}"></script>
+{% endblock %}
+

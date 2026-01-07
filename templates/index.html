@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Upload & Process - PCB Defect Detection{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="hero-section">
+        <h1 class="hero-title">🔍 PCB Defect Detection System</h1>
+        <p class="hero-subtitle">Upload PCB images to detect defects using YOLOv8 AI Model</p>
+    </div>
+
+    <div class="content-grid">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-card">
+                <h3>⚙️ Model Configuration</h3>
+                
+                <div class="form-group">
+                    <label for="model-path">📁 Model Path</label>
+                    <input type="text" id="model-path" value="artifacts/ultralytics/pcb_yolov8_s/weights/best.pt" 
+                           class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="conf-threshold">🎯 Confidence Threshold: <span id="conf-value">0.25</span></label>
+                    <input type="range" id="conf-threshold" min="0.1" max="1.0" step="0.05" value="0.25" 
+                           class="form-slider">
+                </div>
+
+                <div class="form-group">
+                    <label for="img-size">📐 Image Size</label>
+                    <select id="img-size" class="form-select">
+                        <option value="640" selected>640</option>
+                        <option value="1280">1280</option>
+                    </select>
+                </div>
+
+                <div class="device-info">
+                    <div class="info-item">
+                        <span class="info-label">Device:</span>
+                        <span class="info-value">{{ device }}</span>
+                    </div>
+                    {% if gpu_name %}
+                    <div class="info-item">
+                        <span class="info-label">GPU:</span>
+                        <span class="info-value">{{ gpu_name }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <button id="load-model-btn" class="btn btn-primary btn-block" 
+                        {% if model_loaded %}disabled{% endif %}>
+                    {% if model_loaded %}✅ Model Loaded{% else %}🚀 Load Model{% endif %}
+                </button>
+
+                <div class="defect-classes">
+                    <h4>📋 Defect Classes</h4>
+                    <ul class="class-list">
+                        <li>🔴 Missing_hole</li>
+                        <li>🟠 Mouse_bite</li>
+                        <li>🟡 Open_circuit</li>
+                        <li>🟢 Short</li>
+                        <li>🔵 Spur</li>
+                        <li>🟣 Spurious_copper</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-panel">
+            <div class="card">
+                <h2>📤 Upload PCB Images</h2>
+                
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-content">
+                        <div class="upload-icon">📁</div>
+                        <p class="upload-text">Drag and drop images here</p>
+                        <p class="upload-hint">or</p>
+                        <!-- Use a label + input so the browser handles opening the dialog (no JS required) -->
+                        <label class="btn btn-primary browse-label" id="browse-btn">
+                            📂 Browse Files
+                            <input type="file"
+                                   id="file-input"
+                                   name="files"
+                                   multiple
+                                   accept="image/jpeg,image/png,image/jpg,.jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                   style="display: none;">
+                        </label>
+                        <p class="upload-hint" style="margin-top: 10px;">Supports: JPG, PNG (Multiple files allowed)</p>
+                    </div>
+                </div>
+
+                <div id="file-list-container" style="display: none;">
+                    <div class="file-list-header">
+                        <h3>📋 Uploaded Files (<span id="file-count">0</span>)</h3>
+                    </div>
+                    <div id="file-list" class="file-list"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="process-btn" class="btn btn-success btn-large" disabled>
+                        🔎 Process All Images & Generate Annotations
+                    </button>
+                    <button id="clear-btn" class="btn btn-secondary">🧹 Clear</button>
+                </div>
+
+                <div id="progress-container" class="progress-container" style="display: none;">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <p id="progress-text" class="progress-text">Processing...</p>
+                </div>
+
+                <div id="upload-preview" class="upload-preview"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Set global status for external scripts
+    window.modelLoaded = "{{ 'true' if model_loaded else 'false' }}" === "true";
+    console.log('Model loaded:', window.modelLoaded);
+    
+    // Ensure DOM is ready before initializing
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing upload functionality');
+        });
+    } else {
+        console.log('DOM already loaded');
+    }
+</script>
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+{% endblock %}
+

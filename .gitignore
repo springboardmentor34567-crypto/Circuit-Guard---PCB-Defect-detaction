@@ -1,0 +1,16 @@
+# Ignore entire PCB_DATASET
+PCB_DATASET/
+
+# Allow folder structure up to test
+# !PCB_DATASET/yolo_dataset/
+# !PCB_DATASET/yolo_dataset/images/
+# !PCB_DATASET/yolo_dataset/images/test/
+
+# Allow ONLY test images
+# !PCB_DATASET/yolo_dataset/images/test/**
+
+trails/
+results/
+artifacts/
+Reports/*.docx
+notebooks/runs/
