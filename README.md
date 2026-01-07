@@ -37,7 +37,7 @@ CircuitGuard/
 ------
 
 # Setup & Run
-git clone https://github.com/prachi-2506/CircuitGuard.git
+git clone https://github.com/springboardmentor34567-crypto/Circuit-Guard---PCB-Defect-detaction.git
 cd CircuitGuard
 
 * Backend
@@ -73,7 +73,6 @@ streamlit run app.py
 ![CircuitGuard accuracy](screenshots/5.png)
 ![CircuitGuard accuracy](screenshots/6.png)
 ![CircuitGuard accuracy](screenshots/7.png)
-![CircuitGuard accuracy](screenshots/8.png)
 
 ------
 
