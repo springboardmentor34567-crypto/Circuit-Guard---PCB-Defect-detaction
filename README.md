@@ -1,96 +1,271 @@
-# 🚀 CircuitGuard: PCB Defect Detection using Deep Learning
+# 🔍 PCB Defect Detection System
 
-## 📌 Overview
+A powerful web-based PCB (Printed Circuit Board) defect detection system built with **FastAPI** and **YOLOv8 deep learning model**.  
+This system automatically detects and classifies 6 types of defects in PCB images with high accuracy in real-time.
 
-Printed Circuit Boards (PCBs) form the backbone of modern electronic systems. Even minor manufacturing defects can lead to device malfunction, short circuits, or long-term reliability failures. Ensuring PCB quality is therefore a critical requirement in electronics manufacturing.
+---
 
-**CircuitGuard** is an **AI-powered PCB defect detection system** that automates PCB inspection using **deep learning and computer vision**, providing fast, accurate, and scalable defect detection.
+## 🌟 Features
+
+### Core Functionality
+- **Real-time Defect Detection**: Upload PCB images and get instant defect analysis
+- **Batch Processing**: Process multiple images simultaneously with progressive results
+- **High Accuracy**: Powered by YOLOv8 trained on 1000+ PCB images
+- **Visual Analytics**: Interactive charts showing defect distribution
+- **Grid & List View**: Two viewing modes for better user experience
+
+### Defect Types Detected
+- ⚠️ **Missing Hole** - Drilling defects
+- 🐭 **Mouse Bite** - Edge irregularities  
+- ⚡ **Open Circuit** - Broken connections
+- 🔌 **Short Circuit** - Unwanted connections
+- 📍 **Spur** - Extra copper protrusions
+- 💎 **Spurious Copper** - Unwanted copper residue
+
+### Download Options
+- **Individual Downloads**
+  - Annotated images with bounding boxes
+  - Original images
+  - CSV reports per image
+- **Batch Downloads**
+  - Combined CSV report for all images
+  - ZIP file with all annotated images
+
+### User Experience
+- **Modern UI**: Beautiful gradient design with smooth animations
+- **Responsive Design**: Works seamlessly on desktop and mobile
+- **Drag & Drop**: Easy file upload with drag-and-drop support
+- **Real-time Feedback**: Live progress indicators and status updates
+- **Modal View**: Click thumbnails to view detailed results
+- **API Documentation**: Interactive Swagger UI at `/docs`
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────┐
+│   Browser   │ ← User Interface (HTML/CSS/JS)
+│  Port 8000  │
+└──────┬──────┘
+       │ HTTP Request
+       ▼
+┌─────────────────────────────────┐
+│      FastAPI Server             │
+│  ┌──────────┐  ┌─────────────┐ │
+│  │ Frontend │  │   Backend   │ │
+│  │Templates │  │   API       │ │
+│  └──────────┘  └──────┬──────┘ │
+│                       │         │
+│                ┌──────▼──────┐  │
+│                │  YOLOv8 AI  │  │
+│                │   Model     │  │
+│                └─────────────┘  │
+└─────────────────────────────────┘
+       │
+       ▼ Results (JSON + Base64)
+┌─────────────┐
+│   Browser   │ ← Displays Results
+└─────────────┘
+```
+
+ 
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.9 or higher
+- pip (Python package manager)
+- 4GB+ RAM recommended for ML model inference
+- Modern web browser (Chrome, Firefox, Edge)
+- (Optional) NVIDIA GPU with CUDA for faster processing
+
+### Installation
+
+#### 1. Clone the Repository
+```bash
+git clone https://github.com/deepakpatidar1210/PCB-Defect-Detect.git
+cd PCB-Defect-Detect
+```
+
+#### 2. Create Virtual Environment
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# Linux/Mac
+python3 -m venv venv
+source venv/bin/activate
+```
+
+#### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
 
-## ❗ Problem Statement
+#### 4. Run the Application
+```bash
+python main.py
+```
 
-Traditional PCB inspection methods rely heavily on **manual visual inspection**, which presents several challenges:
+#### 5. Access the Application
+Open your browser and navigate to:
+- **Main App**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
 
-* Time-consuming and labor-intensive
-* Inconsistent inspection quality
-* Prone to human fatigue and error
-* Not scalable for high-volume production
+---
 
-As manufacturing throughput increases, manual inspection becomes impractical and unreliable.
+## 📖 Usage Guide
 
-## 💡 Proposed Solution
+### Step 1: Upload Images
+- Click the upload area or drag & drop PCB images
+- Supported formats: PNG, JPG, JPEG
+- Multiple images can be uploaded at once
 
-CircuitGuard eliminates these limitations by introducing an **end-to-end automated inspection pipeline**.
+### Step 2: Detect Defects
+- Click the **🚀 Start Detection** button
+- Watch images being processed progressively
+- Real-time progress bar shows processing status
 
-The system:
+### Step 3: View Results
+**List View (Default):**
+- Side-by-side comparison (Original vs Annotated)
+- Detection table with defect details
+- Individual download buttons
 
-* Uses a **YOLO-based deep learning model** for real-time defect detection
-* Applies **image processing techniques** to analyze PCB images
-* Automatically **detects and classifies PCB defects with high precision**
-* Exposes model inference through a **FastAPI backend**
-* Provides an intuitive **Streamlit-based frontend** for easy interaction and visualization
+**Grid View:**
+- Thumbnail gallery of all results
+- Click any image to open detailed modal
+- Perfect for quick overview
+
+### Step 4: Download Reports
+**Individual Downloads:**
+- 💾 Download Annotated Image
+- 📥 Download Original Image  
+- 📄 Download CSV Report
+
+**Batch Downloads:**
+- 📊 Download Combined CSV (all detections)
+- 📦 Download All Images (ZIP)
+
+### Step 5: View Analytics
+- Overall summary statistics
+- Interactive bar chart (Chart.js)
+- Defect distribution breakdown
+- Images processed count
+
+---
+
+## 🛠️ Technology Stack
+
+### Backend
+- **FastAPI** - Modern Python web framework
+- **Uvicorn** - ASGI server
+- **YOLOv8** - Object detection model (Ultralytics)
+- **OpenCV** - Image processing
+- **NumPy** - Numerical operations
+- **Pillow** - Image handling
+
+### Frontend
+- **Jinja2** - Template engine
+- **HTML5/CSS3** - Structure and styling
+- **JavaScript** - Interactive functionality
+- **Chart.js** - Data visualization
+- **Fetch API** - AJAX requests
+
+### AI/ML
+- **YOLOv8** - Pre-trained and fine-tuned
+- **PyTorch** - Deep learning framework
+- **CUDA** - GPU acceleration (optional)
+
+### Training Platform
+- **Google Colab** - Cloud GPU training
+- **Data Augmentation** - Mosaic, Mixup, Rotation
+- **Iterative Training** - 10 → 20 → 50 epochs
+
+---
+
+## 📁 Project Structure
+
+```
+PCB-DEFECT-DETECTION/
+├── main.py                    # FastAPI application
+├── requirements.txt           # Python dependencies
+├── README.md                 # Documentation
+├── templates/
+│   └── index.html            # Frontend HTML
+├── static/
+│   ├── style.css             # Styling
+│   └── script.js             # Frontend logic
+├── models/
+│   └── best.pt               # YOLOv8 trained model
+├── uploads/                  # Temporary storage (auto-created)
+└── results/                  # Detection results (auto-created)
+```
+
+---
+
+## 📊 Model Training Details
+
+### Dataset
+- **Source**: PCB defect dataset with XML annotations
+- **Classes**: 6 defect types
+- **Split**: 80% Training, 20% Validation
+- **Format**: Converted from VOC XML to YOLO format
+
+### Training Process
+1. **Initial Training**: 10 epochs with YOLOv8s base model
+2. **Continued Training**: +10 epochs for refinement
+3. **Fine-tuning**: +20 epochs with adjusted hyperparameters
+4. **Final Training**: +50 epochs with data augmentation
+
+### Hyperparameters
+- **Batch Size**: 4-8
+- **Image Size**: 640x640
+- **Optimizer**: SGD with cosine learning rate
+- **Learning Rate**: 0.001 (initial)
+- **Data Augmentation**: Mosaic, Mixup, HSV, Rotation, Scale
+
+### Results
+- **Accuracy**: 95%+ on validation set
+- **Inference Speed**: <2 seconds per image (CPU)
+- **Model Size**: ~25MB (best.pt)
+
+---
+
+ 
+ 
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+---
 
 
-## ⚙️ Key Features
+## 👨‍💻 Author
 
-* 🔍 Automated PCB defect detection and classification
-* 🧠 YOLO-based deep learning model for real-time inference
-* ⚡ High-speed and accurate defect localization
-* 🌐 **FastAPI backend** for scalable and efficient model serving
-* 🖥️ **Streamlit frontend** for user-friendly inspection and result visualization
-* 📊 Consistent performance compared to manual inspection
+**Deepak Patidar**  
+GitHub: [@deepakpatidar1210](https://github.com/deepakpatidar1210)
 
+---
 
-## 🏗️ System Architecture (High Level)
+ 
 
-1. **PCB Image Upload (Streamlit UI)**
-2. **Request Handling (FastAPI Backend)**
-3. **Image Preprocessing**
-4. **YOLO-Based Defect Detection Model**
-5. **Defect Classification & Bounding Box Generation**
-6. **Results Visualization on Frontend**
+## 🌟 Show Your Support
 
+If you find this project helpful, please:
+- ⭐ Star this repository
+- 🔗 Share with others
+- 🐛 Report bugs
+- 💡 Suggest new features
 
-## 🧰 Tech Stack
+---
 
-### 🔹 Backend
-
-* FastAPI
-* Deep Learning Inference Engine
-* YOLO Model
-
-### 🔹 Frontend
-
-* Streamlit
-
-### 🔹 Core Technologies
-
-* Python
-* Computer Vision
-* Image Processing
-* Deep Learning
-
-
-## 🎯 Use Cases
-
-* Electronics manufacturing quality control
-* Automated PCB inspection pipelines
-* AI-driven industrial automation
-* Academic and research projects in computer vision
-
-
-## 📈 Impact
-
-By automating PCB inspection, CircuitGuard:
-
-* Reduces inspection time and operational cost
-* Minimizes human error
-* Improves long-term product reliability
-* Scales efficiently with increasing production demands
-
-
-## 🤝 Contribution
-
-Contributions, enhancements, and suggestions are welcome.
-Feel free to fork the repository and submit a pull request.
-
+<p align="center">
+  <strong>Made with ❤️ by Deepak Patidar</strong><br>
+  🚀 PCB Defect Detection System - Powered by AI
+</p>

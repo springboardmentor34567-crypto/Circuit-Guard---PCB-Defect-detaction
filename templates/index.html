@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB Defect Detection System</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>🔬 PCB Defect Detection System</h1>
+                <p class="header-subtitle">Advanced AI-powered quality inspection using YOLOv8 deep learning</p>
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="statusText">Checking connection...</span>
+                </div>
+            </div>
+        </div>
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Drag & Drop PCB Images Here</div>
+                <div class="upload-subtext">or click to browse • PNG, JPG, JPEG supported</div>
+            </div>
+            <input type="file" id="fileInput" multiple accept="image/png,image/jpeg,image/jpg">
+            
+            <div class="file-list" id="fileList"></div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" id="detectBtn" disabled>
+                    <span>🚀 Start Detection</span>
+                </button>
+                <button class="btn btn-danger" id="clearBtn" disabled>
+                    <span>🗑️ Clear All</span>
+                </button>
+            </div>
+        </div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <h2 id="loadingText">Processing Images...</h2>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p class="progress-text" id="progressText">0 / 0</p>
+        </div>
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2>📊 Detection Results</h2>
+            </div>
+            <div id="resultsContainer"></div>
+            
+            <div class="summary-section" id="summarySection" style="display: none;">
+                <h2>📈 Performance Summary</h2>
+                <div class="summary-grid" id="summaryGrid"></div>
+                
+                <div class="chart-section">
+                    <div class="chart-container" id="chartContainer"></div>
+                </div>
+                
+                <div class="download-section">
+                    <button class="btn btn-primary" id="downloadAllCsv">
+                        <span>📄 Download Combined CSV</span>
+                    </button>
+                    <button class="btn btn-primary" id="downloadAllZip">
+                        <span>📦 Download All Images (ZIP)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>PCB Defect Detection System • Powered by FastAPI + YOLOv8</p>
+    </footer>
+    <script src="/static/script.js"></script>
+</body>
+</html>
