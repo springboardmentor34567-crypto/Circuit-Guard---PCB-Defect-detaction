@@ -29,9 +29,13 @@ It automates PCB defect detection, supports batch inspection, and generates anno
 # Project Structure
 CircuitGuard/
 ├── backend/        # FastAPI inference server
+|
 ├── frontend/       # Streamlit UI
+|
 ├── screenshots/    # Output & UI images
+|
 ├── requirements.txt
+|
 └── README.md
 
 ------
@@ -77,16 +81,16 @@ streamlit run app.py
 ------
 
 # Future Scope
-Cloud / edge deployment
-Factory inspection pipeline integration
-Real-time camera-based PCB inspection
+* Cloud / edge deployment
+* Factory inspection pipeline integration
+* Real-time camera-based PCB inspection
 
 ------
 
 # Acknowledgements
-Ultralytics YOLO
-Streamlit
-FastAPI
+* Ultralytics YOLO
+* Streamlit
+* FastAPI
 
 ------
 
