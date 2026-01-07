@@ -18,11 +18,11 @@ It automates PCB defect detection, supports batch inspection, and generates anno
 ------
 
 # Tech Stack
-Model: YOLOv11m (Ultralytics)
-Backend: FastAPI
-Frontend: Streamlit
-Language: Python
-Deployment: Local 
+* Model: YOLOv11m (Ultralytics)
+* Backend: FastAPI
+* Frontend: Streamlit
+* Language: Python
+* Deployment: Local 
 
 ------
 
