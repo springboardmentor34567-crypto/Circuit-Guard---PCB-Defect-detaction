@@ -27,31 +27,30 @@ It automates PCB defect detection, supports batch inspection, and generates anno
 ------
 
 # Project Structure
-CircuitGuard/
-├── backend/        # FastAPI inference server  
-|  
+CircuitGuard/  
+├── backend/        # FastAPI inference server   
 ├── frontend/       # Streamlit UI  
-|  
 ├── screenshots/    # Output & UI images  
-|  
 ├── requirements.txt  
-|  
 └── README.md  
 
 ------
 
 # Setup & Run
 
-```git clone https://github.com/springboardmentor34567-crypto/Circuit-Guard---PCB-Defect-detaction.git
+```
+git clone https://github.com/springboardmentor34567-crypto/Circuit-Guard---PCB-Defect-detaction.git    #choose branch as Prachi_Khatri
 cd CircuitGuard
 ```
 * Backend
-```cd backend
+```
+cd backend
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 * Frontend
-```cd frontend
+```
+cd frontend
 pip install -r requirements.txt
 streamlit run app.py
 ```
@@ -61,6 +60,7 @@ streamlit run app.py
 * Trained on a custom PCB defect dataset (80:20 split)
 * High precision & recall for reliable inspection
 * Optimized for small and subtle PCB defects
+  
 ![CircuitGuard accuracy](screenshots/1.png)
 
 ------
