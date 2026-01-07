@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pt
+*.h5
+*.onnx
+data/
+dataset/
+datasets/
+venv/
+env/
+cg-fastapi/
+.DS_Store
