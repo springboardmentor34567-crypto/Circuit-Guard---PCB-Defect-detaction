@@ -1,9 +1,17 @@
-streamlit
-ultralytics
-opencv-python
-pillow
-numpy
-pandas
-requests
+# Core API & Server
+fastapi==0.128.0
+uvicorn==0.40.0
+python-multipart==0.0.21
+requests==2.32.5
 
+# Frontend UI
+streamlit==1.52.0
 
+# AI & Computer Vision
+ultralytics==8.3.248
+opencv-python==4.12.0.88
+pillow==12.1.0
+
+# Data Handling
+numpy==2.4.0
+pandas==2.3.3
