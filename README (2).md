@@ -57,15 +57,18 @@ Circuit-Guard---PCB-Defect-detaction/
 ### 🔹 Step 1: Clone the Repository
 
 git clone https://github.com/springboardmentor34567-crypto/Circuit-Guard---PCB-Defect-detaction.git
+
 cd Circuit-Guard---PCB-Defect-detaction
 
 ### 🔹 Step 2: Create a Virtual Environment (Optional)
 
 python -m venv venv
+
 venv\Scripts\activate
+
 Note: Virtual environments are not included in the repository.
 
-###🔹 Step 3: Install Dependencies
+### 🔹 Step 3: Install Dependencies
 
 pip install -r requirements.txt
 
@@ -75,12 +78,14 @@ cd backend
 uvicorn main:app --reload
 
 Backend URL: http://127.0.0.1:8000
+
 API Docs: http://127.0.0.1:8000/docs
 
 ### 🖥️ Running the Frontend
 Open a new terminal, then run:
 
 cd Circuit-Guard---PCB-Defect-detaction
+
 streamlit run frontend/app.py
 
 Frontend URL: http://localhost:8501
@@ -104,6 +109,7 @@ Project report is available in the final_report/ directory
 
 ### 👤 Author
 Name: Sudarshan
+
 Branch: sudarshan_s
 
 ### 📜 License
