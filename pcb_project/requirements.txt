@@ -1,0 +1,16 @@
+streamlit
+fastapi
+uvicorn
+requests
+python-multipart
+
+ultralytics
+torch
+torchvision
+
+opencv-python
+numpy
+pandas
+Pillow
+matplotlib
+reportlab
