@@ -1,96 +1,85 @@
-# 🚀 CircuitGuard: PCB Defect Detection using Deep Learning
+# 🔍 Real-Time PCB Defect Detection System
+
+An industrial-grade automated quality control solution utilizing **YOLOv8** for high-precision defect detection, served via a **FastAPI** backend and an interactive **Streamlit** frontend.
 
 ## 📌 Overview
+This project addresses the critical challenge of manual inspection in PCB manufacturing. By leveraging the **DeepPCB dataset**, the system identifies six common defect types with high accuracy and real-time inference speeds. The architecture is decoupled: a high-performance **FastAPI** server handles the deep learning computations, while a sleek **Streamlit** web interface provides a user-friendly experience for operators.
 
-Printed Circuit Boards (PCBs) form the backbone of modern electronic systems. Even minor manufacturing defects can lead to device malfunction, short circuits, or long-term reliability failures. Ensuring PCB quality is therefore a critical requirement in electronics manufacturing.
+### **Defect Classes Detected:**
+* Missing Hole
+* Mouse Bite
+* Open Circuit
+* Short Circuit
+* Spur
+* Spurious Copper
 
-**CircuitGuard** is an **AI-powered PCB defect detection system** that automates PCB inspection using **deep learning and computer vision**, providing fast, accurate, and scalable defect detection.
+---
 
+## 🚀 Key Features
+* **Decoupled Architecture:** Scalable **FastAPI** backend and a responsive **Streamlit** frontend.
+* **Batch Processing:** Upload and analyze multiple PCB images simultaneously.
+* **Real-Time Visualization:** Annotated results with colored bounding boxes and confidence labels.
+* **Detailed Analytics:** Automatic generation of a **Confidence Table** (defect counts, class names, and raw coordinates).
+* **Data Portability:** Export all processed images and data reports in a single **ZIP file** for audit trails.
 
-## ❗ Problem Statement
+---
 
-Traditional PCB inspection methods rely heavily on **manual visual inspection**, which presents several challenges:
-
-* Time-consuming and labor-intensive
-* Inconsistent inspection quality
-* Prone to human fatigue and error
-* Not scalable for high-volume production
-
-As manufacturing throughput increases, manual inspection becomes impractical and unreliable.
-
-## 💡 Proposed Solution
-
-CircuitGuard eliminates these limitations by introducing an **end-to-end automated inspection pipeline**.
-
-The system:
-
-* Uses a **YOLO-based deep learning model** for real-time defect detection
-* Applies **image processing techniques** to analyze PCB images
-* Automatically **detects and classifies PCB defects with high precision**
-* Exposes model inference through a **FastAPI backend**
-* Provides an intuitive **Streamlit-based frontend** for easy interaction and visualization
+## 🏗️ System Architecture
+The system follows a modern **Client-Server model**:
+1.  **Frontend (Streamlit):** Handles user interaction, image uploads, and rendering of detection results.
+2.  **Backend (FastAPI):** Receives images via API, processes them through the YOLOv8 engine, and returns structured JSON data.
+3.  **Model (YOLOv8):** Optimized with **C2f modules** and **Anchor-Free detection** for superior performance on small-scale industrial defects.
 
 
-## ⚙️ Key Features
 
-* 🔍 Automated PCB defect detection and classification
-* 🧠 YOLO-based deep learning model for real-time inference
-* ⚡ High-speed and accurate defect localization
-* 🌐 **FastAPI backend** for scalable and efficient model serving
-* 🖥️ **Streamlit frontend** for user-friendly inspection and result visualization
-* 📊 Consistent performance compared to manual inspection
+---
 
+## 📊 Performance Metrics
+Validated on the DeepPCB dataset:
+* **Precision:** 95.47%
+* **Recall:** 94.02%
+* **mAP50:** 95.03%
+* **mAP50-95:** 90.62%
 
-## 🏗️ System Architecture (High Level)
+---
 
-1. **PCB Image Upload (Streamlit UI)**
-2. **Request Handling (FastAPI Backend)**
-3. **Image Preprocessing**
-4. **YOLO-Based Defect Detection Model**
-5. **Defect Classification & Bounding Box Generation**
-6. **Results Visualization on Frontend**
+## 📂 Project Structure
+```text
+pcb-defect-detection/
+├── models/             # Production weights (e.g., best.pt)
+├── training/           # Model development phase (Scripts/Notebooks)
+│   └── train_yolo.py   # Script used to train the YOLO model
+├── src/
+│   ├── main.py        # FastAPI backend logic (Inference Engine)
+│   └── app.py         # Streamlit frontend UI (User Interface)
+├── data/              # Sample images and pcb_data.yaml config
+├── requirements.txt   # Project dependencies
+└── README.md          # Project documentation
+🛠️ Installation & Setup
+1. Clone the Repository
+Bash
 
+git clone [https://github.com/your-username/pcb-defect-detection.git](https://github.com/your-username/pcb-defect-detection.git)
+cd pcb-defect-detection
+2. Install Dependencies
+Bash
 
-## 🧰 Tech Stack
+pip install -r requirements.txt
+3. Run the Backend (Terminal 1)
+Bash
 
-### 🔹 Backend
+uvicorn src.main:app --reload --port 8000
+4. Run the Frontend (Terminal 2)
+Bash
 
-* FastAPI
-* Deep Learning Inference Engine
-* YOLO Model
+streamlit run src.app.py
+🛡️ Challenges & Solutions
+Small Target Detection: Utilized the YOLOv8 C2f backbone to preserve spatial features for minute defects like "spurs."
 
-### 🔹 Frontend
+Process Efficiency: Implemented an asynchronous FastAPI service to ensure the UI remains responsive during heavy batch inference.
 
-* Streamlit
+Data Management: Developed a ZIP-export feature to provide manufacturers with an immediate, organized audit trail of all inspections.
 
-### 🔹 Core Technologies
+🤝 Contributing
 
-* Python
-* Computer Vision
-* Image Processing
-* Deep Learning
-
-
-## 🎯 Use Cases
-
-* Electronics manufacturing quality control
-* Automated PCB inspection pipelines
-* AI-driven industrial automation
-* Academic and research projects in computer vision
-
-
-## 📈 Impact
-
-By automating PCB inspection, CircuitGuard:
-
-* Reduces inspection time and operational cost
-* Minimizes human error
-* Improves long-term product reliability
-* Scales efficiently with increasing production demands
-
-
-## 🤝 Contribution
-
-Contributions, enhancements, and suggestions are welcome.
-Feel free to fork the repository and submit a pull request.
-
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated. 
