@@ -1,96 +1,123 @@
-# 🚀 CircuitGuard: PCB Defect Detection using Deep Learning
+PROJECT_NAME: CircuitGuard – Intelligent PCB Defect Detection System
 
-## 📌 Overview
+OVERVIEW:
+CircuitGuard is a production-oriented PCB defect detection system designed
+to demonstrate real-world deployment of deep learning models.
+The system integrates a YOLO-based computer vision model with a FastAPI backend
+and a Streamlit frontend to deliver an end-to-end defect inspection pipeline.
+It enables automated quality inspection, visual analytics, and report generation
+for printed circuit boards (PCBs).
 
-Printed Circuit Boards (PCBs) form the backbone of modern electronic systems. Even minor manufacturing defects can lead to device malfunction, short circuits, or long-term reliability failures. Ensuring PCB quality is therefore a critical requirement in electronics manufacturing.
+KEY_HIGHLIGHTS:
+- End-to-end ML system (Frontend + Backend + Model)
+- Clear client–server separation using REST APIs
+- Real-time defect detection with visual feedback
+- Industry-style deployment workflow
+- Scalable and modular architecture
 
-**CircuitGuard** is an **AI-powered PCB defect detection system** that automates PCB inspection using **deep learning and computer vision**, providing fast, accurate, and scalable defect detection.
+TECHNOLOGY_STACK:
+- Programming Language: Python 3.11
+- Deep Learning Model: YOLO (Ultralytics)
+- Backend Framework: FastAPI
+- Frontend Framework: Streamlit
+- Image Processing: OpenCV, PIL
+- Server: Uvicorn
+- Version Control: Git, GitHub (LFS enabled for model files)
 
+SUPPORTED_DEFECT_TYPES:
+- Missing Hole
+- Mouse Bite
+- Open Circuit
+- Short Circuit
+- Spur
+- Spurious Copper
 
-## ❗ Problem Statement
+SYSTEM_ARCHITECTURE:
+User
+ → Streamlit Frontend (UI & Visualization)
+ → REST API (HTTP POST /predict)
+ → FastAPI Backend (Inference Engine)
+ → YOLO Model (best.pt)
+ → JSON Response + Annotated Outputs
+ → Frontend Dashboard & Downloads
 
-Traditional PCB inspection methods rely heavily on **manual visual inspection**, which presents several challenges:
+PROJECT_STRUCTURE:
+CircuitGuard/
+├── app.py                     # Streamlit frontend application
+├── pcb-defect-backend/
+│   ├── main.py                # FastAPI backend service
+│   ├── model/
+│   │   └── best.pt            # Trained YOLO model (LFS tracked)
+│   └── uploads/               # Images stored by backend for traceability
+├── screenshots/               # Application UI screenshots
+├── requirements.txt
+├── packages.txt
+├── runtime.txt
+└── README.md
 
-* Time-consuming and labor-intensive
-* Inconsistent inspection quality
-* Prone to human fatigue and error
-* Not scalable for high-volume production
+FRONTEND_CAPABILITIES:
+- Upload single or multiple PCB images
+- Sends images to backend via REST API
+- Displays original and annotated images
+- Visualizes defect statistics (bar & donut charts)
+- Enables export of annotated images and reports
 
-As manufacturing throughput increases, manual inspection becomes impractical and unreliable.
+BACKEND_CAPABILITIES:
+- Accepts images via POST /predict endpoint
+- Saves uploaded images for verification and audit
+- Executes YOLO inference on the backend
+- Returns structured JSON responses to the frontend
 
-## 💡 Proposed Solution
+API_SPECIFICATION:
+Endpoint: POST /predict
+Input:
+- Multipart form-data
+- Image file (PNG, JPG, JPEG)
 
-CircuitGuard eliminates these limitations by introducing an **end-to-end automated inspection pipeline**.
+Sample_Response:
+{
+  "status": "success",
+  "defects_detected": {
+    "spur": 1
+  },
+  "total_defects": 1
+}
 
-The system:
+MODEL_INFORMATION:
+Model_Name: YOLO (Ultralytics)
+Input_Type: PCB top-view images
+Performance_Metrics:
+- mAP@50: 0.98
+- Precision: 0.97
+- Recall: 0.97
 
-* Uses a **YOLO-based deep learning model** for real-time defect detection
-* Applies **image processing techniques** to analyze PCB images
-* Automatically **detects and classifies PCB defects with high precision**
-* Exposes model inference through a **FastAPI backend**
-* Provides an intuitive **Streamlit-based frontend** for easy interaction and visualization
+INTEGRATION_PROOF:
+- Images uploaded from the frontend are saved in:
+  pcb-defect-backend/uploads/
+- Inference is executed exclusively in the backend
+- Results are returned via REST API and rendered in frontend
+- Confirms true frontend–backend communication (not local-only execution)
 
+KNOWN_LIMITATIONS:
+- Some visualization logic remains frontend-driven
+- Backend response metadata can be extended further
+- Current setup is optimized for single-node inference
 
-## ⚙️ Key Features
+FUTURE_ENHANCEMENTS:
+- Fully backend-driven annotation rendering
+- Database integration for inspection history
+- User authentication and access control
+- Containerization using Docker
+- Cloud deployment (AWS / Azure / GCP)
+- Asynchronous batch processing for large-scale inspection
 
-* 🔍 Automated PCB defect detection and classification
-* 🧠 YOLO-based deep learning model for real-time inference
-* ⚡ High-speed and accurate defect localization
-* 🌐 **FastAPI backend** for scalable and efficient model serving
-* 🖥️ **Streamlit frontend** for user-friendly inspection and result visualization
-* 📊 Consistent performance compared to manual inspection
+AUTHOR:
+Name: Prashant Yadav
+Degree: B.Tech – Computer Science & Engineering (Artificial Intelligence)
+Project_Type: Internship / Applied Machine Learning Project
 
-
-## 🏗️ System Architecture (High Level)
-
-1. **PCB Image Upload (Streamlit UI)**
-2. **Request Handling (FastAPI Backend)**
-3. **Image Preprocessing**
-4. **YOLO-Based Defect Detection Model**
-5. **Defect Classification & Bounding Box Generation**
-6. **Results Visualization on Frontend**
-
-
-## 🧰 Tech Stack
-
-### 🔹 Backend
-
-* FastAPI
-* Deep Learning Inference Engine
-* YOLO Model
-
-### 🔹 Frontend
-
-* Streamlit
-
-### 🔹 Core Technologies
-
-* Python
-* Computer Vision
-* Image Processing
-* Deep Learning
-
-
-## 🎯 Use Cases
-
-* Electronics manufacturing quality control
-* Automated PCB inspection pipelines
-* AI-driven industrial automation
-* Academic and research projects in computer vision
-
-
-## 📈 Impact
-
-By automating PCB inspection, CircuitGuard:
-
-* Reduces inspection time and operational cost
-* Minimizes human error
-* Improves long-term product reliability
-* Scales efficiently with increasing production demands
-
-
-## 🤝 Contribution
-
-Contributions, enhancements, and suggestions are welcome.
-Feel free to fork the repository and submit a pull request.
+PROJECT_GOAL:
+To demonstrate practical deployment of a computer vision model
+in a real-world, production-style architecture with clean
+engineering practices and scalable design.
 
