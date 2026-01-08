@@ -1,9 +1,7 @@
 streamlit
 ultralytics
-opencv-python
-pillow
-numpy
+torch
+opencv-python-headless
+Pillow
 pandas
-requests
-
-
+numpy
