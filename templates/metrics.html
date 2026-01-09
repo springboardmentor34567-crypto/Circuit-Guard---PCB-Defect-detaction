@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid pb-5">
+    
+    <h2 class="text-white mb-4">📊 Reference Benchmarks (Validation Data)</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-dark text-white text-center p-3 border-secondary shadow-sm">
+                <h3 class="text-primary">0.970</h3> 
+                <small class="text-muted text-uppercase fw-bold">mAP @ 50</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark text-white text-center p-3 border-secondary shadow-sm">
+                <h3 class="text-success">0.953</h3> 
+                <small class="text-muted text-uppercase fw-bold">Precision</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark text-white text-center p-3 border-secondary shadow-sm">
+                <h3 class="text-info">0.953</h3> 
+                <small class="text-muted text-uppercase fw-bold">Recall</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark text-white text-center p-3 border-secondary shadow-sm">
+                <h3 class="text-warning">~18ms</h3> 
+                <small class="text-muted text-uppercase fw-bold">Inference Speed</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-dark text-white border-secondary shadow-lg mb-4">
+        <div class="card-header border-secondary d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">🧩 Confusion Matrix (Validation Set)</h5>
+            <span class="badge bg-secondary">N = 69 Images (301 Defects)</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive" style="max-height: 500px;">
+                <table class="table table-dark table-bordered text-center align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="bg-black text-white">GT \ Pred</th>
+                            {% for label in cm.labels %}
+                                <th class="text-white" style="background-color: #0d6efd;">{{label}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in cm.matrix %}
+                        {% set row_idx = loop.index0 %}
+                        <tr>
+                            <th class="text-white text-end pe-3" style="background-color: #0d6efd;">{{ cm.labels[row_idx] }}</th>
+                            
+                            {% for cell in row %}
+                                {% set is_diagonal = (loop.index0 == row_idx) %}
+                                
+                                {% set bg_color = 'transparent' %}
+                                {% if is_diagonal %}
+                                    {% set bg_color = 'rgba(60, 120, 216, ' ~ (cell / 60) ~ ')' %}
+                                {% elif cell > 0 %}
+                                    {% set bg_color = 'rgba(220, 53, 69, 0.3)' %}
+                                {% endif %}
+
+                                <td style="background-color: {{ bg_color }}; color: white; width: 14%;">
+                                    {% if cell > 0 %}
+                                        <span class="fw-bold">{{ cell }}</span>
+                                    {% else %}
+                                        <span class="text-muted small">-</span>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card bg-dark border-secondary h-100 shadow">
+                <div class="card-header border-secondary text-info">
+                    <h5 class="mb-0">💡 How to Interpret This Data</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush bg-transparent">
+                        <li class="list-group-item bg-transparent text-white border-secondary">
+                            🟦 <strong>The Diagonal Line (Blue):</strong> Represents <u>Correct Predictions</u>. 
+                            <br><small class="text-muted">Example: The model correctly identified 50 "Missing Holes". High numbers here are good.</small>
+                        </li>
+                        <li class="list-group-item bg-transparent text-white border-secondary">
+                            🟥 <strong>Off-Diagonal Cells (Red Tint):</strong> Represents <u>Confusions/Errors</u>.
+                            <br><small class="text-muted">Example: If row "Mouse Bite" has a 2 in column "Missing Hole", the model mistook a Mouse Bite for a Missing Hole twice.</small>
+                        </li>
+                        <li class="list-group-item bg-transparent text-white border-secondary">
+                            <strong>Ideal Scenario:</strong> You want high numbers on the diagonal and zeros everywhere else.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card bg-dark border-secondary h-100 shadow">
+                <div class="card-header border-secondary text-warning">
+                    <h5 class="mb-0">📚 Professional Metrics Glossary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-success">🎯 Precision (Quality)</h6>
+                        <p class="small text-muted mb-0">
+                            "Of all the defects the model predicted, how many were actually defects?" 
+                            <br><i>High precision means fewer False Alarms.</i>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-info">🔍 Recall (Sensitivity)</h6>
+                        <p class="small text-muted mb-0">
+                            "Of all the actual defects in the image, how many did the model find?"
+                            <br><i>High recall means fewer Missed Defects.</i>
+                        </p>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold text-primary">🏆 mAP@50 (Mean Average Precision)</h6>
+                        <p class="small text-muted mb-0">
+                            The gold standard score for Object Detection. It combines Precision and Recall across all classes.
+                            <br><i>A score of 0.970 indicates excellent industry-grade performance.</i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
