@@ -55,26 +55,6 @@ async def process_images(files: list[UploadFile] = File(...)):
                 shutil.copyfileobj(file.file, f)
 
             # =====================
-            # PCB GATE (MODEL 1)
-            # =====================
-            pcb_result = is_pcb(image_path)
-
-            if not pcb_result["is_pcb"]:
-                results.append({
-                    "file": file.filename,
-                    "status": "NOT_PCB",
-                    "pcb_confidence": pcb_result["pcb_conf"],
-                    "defect_count": 0,
-                    "defects": [],
-                    "image_path": to_static_url(image_path),
-                    "annotated_path": None,
-                    "pdf_path": None,
-                    "json_path": None,
-                    "inference_ms": 0
-                })
-                continue
-
-            # =====================
             # YOLO DEFECT MODEL (MODEL 2)
             # =====================
             metadata, annotated_path, json_path = run_inference(
