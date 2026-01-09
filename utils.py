@@ -1,22 +1,30 @@
 # backend/utils.py
-import os
+
 import cv2
+import numpy as np
+from fastapi import UploadFile
 
-def ensure_dir(path):
-    os.makedirs(path, exist_ok=True)
+async def read_image(file: UploadFile) -> np.ndarray:
+    """
+    Convert uploaded image to OpenCV format
+    """
+    contents = await file.read()
+    np_img = np.frombuffer(contents, np.uint8)
+    image = cv2.imdecode(np_img, cv2.IMREAD_COLOR)
+    return image
 
-def draw_boxes_on_image(img_bgr, items, color=(0,255,0), thickness=2):
+def resize_for_inference(img, max_size=640):
     """
-    img_bgr: OpenCV BGR image
-    items: list of dicts with keys 'bbox' [xmin,ymin,xmax,ymax], 'class_name', 'score'
-    Returns annotated BGR image
+    Resize image while preserving aspect ratio.
+    Ensures max(width, height) == max_size.
     """
-    for it in items:
-        xmin, ymin, xmax, ymax = map(int, it['bbox'])
-        label = f"{it['class_name']}:{it['score']:.2f}"
-        cv2.rectangle(img_bgr, (xmin, ymin), (xmax, ymax), color, thickness)
-        # draw filled rectangle for label background
-        (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
-        cv2.rectangle(img_bgr, (xmin, ymin - h - 6), (xmin + w, ymin), color, -1)
-        cv2.putText(img_bgr, label, (xmin, ymin - 4), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1)
-    return img_bgr
+    h, w = img.shape[:2]
+
+    if max(h, w) <= max_size:
+        return img  # no resize needed
+
+    scale = max_size / max(h, w)
+    new_w = int(w * scale)
+    new_h = int(h * scale)
+
+    return cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)

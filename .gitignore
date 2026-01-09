@@ -1,0 +1,13 @@
+# Python virtual environments
+venv/
+env/
+cg-fastapi/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db
