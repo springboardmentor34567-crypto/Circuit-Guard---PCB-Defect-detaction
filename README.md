@@ -82,6 +82,11 @@ To improve robustness in real-world usage, a **binary image classifier** was int
 3. Improves system accuracy and reliability
 
 ---
+## Interface
+<img width="1856" height="927" alt="image" src="https://github.com/user-attachments/assets/db1a9781-e81d-4f86-b3f6-4dfb1098927f" />
+
+<img width="937" height="796" alt="image" src="https://github.com/user-attachments/assets/0b853535-d42c-404c-8e6a-693d1330efa8" />
+
 
 ## System Architecture
 
@@ -168,4 +173,5 @@ This project demonstrates a complete and practical PCB defect detection system u
 **Babulal Dudi**  
 Computer Science & Engineering  
 Interests: Machine Learning, Computer Vision, Backend Systems
+
 
