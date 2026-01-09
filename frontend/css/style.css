@@ -1,0 +1,114 @@
+h1 {
+  text-align: center;
+}
+
+body {
+  background: #0b1220;
+  color: #e5e7eb;
+  font-family: system-ui;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #4f83ff;
+}
+
+.center {
+  text-align: center;
+  margin: 15px 0;
+}
+
+button {
+  background: #4f83ff;
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+}
+.table-container {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #1f2937;
+}
+
+/* Make table layout consistent */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* Header */
+thead th {
+  position: sticky;
+  top: 0;
+  background: #0b1220;
+  z-index: 2;
+  text-align: left;
+}
+
+/* Cells */
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #1f2937;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+/* Hover */
+tbody tr:hover {
+  background: #1e293b;
+  cursor: pointer;
+}
+
+
+.image-row {
+  display: flex;
+  gap: 20px;
+}
+
+.image-row img {
+  width: 48%;
+  border: 1px solid #1f2937;
+}
+
+.progress-bar-bg {
+  background: #1f2937;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #4f83ff;
+  width: 0%;
+}
+
+.hidden {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+#loadingOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 18, 32, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+    pointer-events: all;
+
+}
+
+.loader {
+  color: #4f83ff;
+  font-size: 18px;
+}

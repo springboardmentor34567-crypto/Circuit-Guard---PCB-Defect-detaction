@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PCB Defect Inspection Dashboard</title>
+  <link rel="stylesheet" href="/frontend/css/style.css">
+</head>
+<body>
+
+<h1>PCB Defect Inspection Dashboard</h1>
+
+<input type="file" id="fileInput" multiple accept="image/*">
+
+<div class="center">
+  <button id="processBtn">Process Images</button>
+</div>
+
+<div class="stats">
+  <div>Total Files<br><span id="totalFiles">0</span></div>
+  <div>Average Confidence<br><span id="avgConf">-</span></div>
+  <div>Total Defects<br><span id="totalDefects">0</span></div>
+</div>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>File</th>
+        <th>Confidence</th>
+        <th>Defects</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="resultsTable"></tbody>
+  </table>
+</div>
+
+<a id="zipLink" class="hidden">⬇ Download Full Report Package (zip)</a>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="hidden">
+  <div class="loader">Processing images...</div>
+</div>
+
+<script src="/frontend/js/dashboard.js" defer></script>
+</body>
+</html>
