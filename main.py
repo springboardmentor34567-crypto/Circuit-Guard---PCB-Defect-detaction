@@ -1,17 +1,31 @@
-from PIL import Image
-import base64
-from io import BytesIO
-from fastapi import FastAPI, File, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
-from ultralytics import YOLO
-from collections import Counter
-import shutil
+# backend/main.py
+
 import os
+import time
+import base64
+import cv2
+import torch
+from typing import List
+from fastapi.middleware.cors import CORSMiddleware
 
-# ================== APP ==================
-app = FastAPI(title="PCB Defect Detection API")
+from fastapi import FastAPI, UploadFile, File
+from model import CircuitGuardModel
+from utils import read_image
 
-# ================== CORS ==================
+# --------------------------------------------------
+# CPU OPTIMIZATION (SAFE)
+# --------------------------------------------------
+torch.set_num_threads(os.cpu_count())
+torch.backends.mkldnn.enabled = True
+
+# --------------------------------------------------
+# FASTAPI APP
+# --------------------------------------------------
+app = FastAPI(
+    title="CircuitGuard API",
+    description="PCB Defect Detection using YOLO",
+    version="1.4"
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -20,49 +34,111 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ================== MODEL ==================
-model = YOLO("model/best.pt")
+# --------------------------------------------------
+# LOAD MODEL (ONCE PER WORKER)
+# --------------------------------------------------
+model = CircuitGuardModel()
 
-# ================== DIRECTORIES ==================
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+# ==================================================
+# SINGLE IMAGE ENDPOINT
+# ==================================================
+@app.post("/detect")
+async def detect(file: UploadFile = File(...)):
+    image = await read_image(file)
 
-# ================== ROOT ==================
-@app.get("/")
-def root():
-    return {"status": "Backend running"}
+    t0 = time.time()
 
-# ================== PREDICT API ==================
-@app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+    # 🔥 Let YOLO handle resizing internally (NO manual resize)
+    with torch.no_grad():
+        result = model.model.predict(
+            image,
+            batch=1,
+            imgsz=960,          # ✅ BEST for PCB defects
+            conf=0.25,
+            device="cpu",
+            verbose=False
+        )[0]
 
-    # Save uploaded image
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    infer_time = time.time() - t0
+    print(f"[YOLO] Single inference: {infer_time:.2f} sec")
 
-    # Run YOLO
-    results = model(file_path)
-    r = results[0]
+    detections = []
+    if result.boxes:
+        for box in result.boxes:
+            detections.append({
+                "class_id": int(box.cls[0]),
+                "class_name": model.model.names[int(box.cls[0])],
+                "confidence": float(box.conf[0]),
+                "bbox": [float(x) for x in box.xyxy[0]]
+            })
 
-    # Collect defects
-    defects = []
-    if r.boxes is not None:
-        for c in r.boxes.cls:
-            defects.append(model.names[int(c)])
-
-    defect_counts = Counter(defects)
-
-    # Create annotated image
-    annotated_img = r.plot()[:, :, ::-1]  # BGR → RGB
-    pil_img = Image.fromarray(annotated_img)
-    buf = BytesIO()
-    pil_img.save(buf, format="PNG")
-    img_base64 = base64.b64encode(buf.getvalue()).decode("utf-8")
+    annotated = result.plot()
+    _, buffer = cv2.imencode(".png", annotated)
+    annotated_b64 = base64.b64encode(buffer).decode()
 
     return {
-        "status": "success",
-        "defects_detected": dict(defect_counts),
-        "total_defects": sum(defect_counts.values()),
-        "annotated_image": img_base64
+        "total_defects": len(detections),
+        "detections": detections,
+        "annotated_image": annotated_b64
     }
+
+
+# ==================================================
+# BATCH IMAGE ENDPOINT (OPTIMIZED & ACCURATE)
+# ==================================================
+@app.post("/detect-batch")
+async def detect_batch(files: List[UploadFile] = File(...)):
+    images = []
+    filenames = []
+
+    # Read all images (NO resizing here)
+    for file in files:
+        img = await read_image(file)
+        images.append(img)
+        filenames.append(file.filename)
+
+    t0 = time.time()
+
+    # 🔥 True batch inference (single model call)
+    with torch.no_grad():
+        results = model.model.predict(
+            images,
+            batch=len(images),  # CPU batch inference
+            imgsz=960,          # ✅ preserves small PCB defects
+            conf=0.25,
+            device="cpu",
+            verbose=False
+        )
+
+    infer_time = time.time() - t0
+    print(
+        f"[YOLO] Batch inference: {infer_time:.2f} sec "
+        f"({infer_time / len(images):.2f} sec/image)"
+    )
+
+    responses = []
+
+    for idx, result in enumerate(results):
+        detections = []
+
+        if result.boxes:
+            for box in result.boxes:
+                detections.append({
+                    "class_id": int(box.cls[0]),
+                    "class_name": model.model.names[int(box.cls[0])],
+                    "confidence": float(box.conf[0]),
+                    "bbox": [float(x) for x in box.xyxy[0]]
+                })
+
+        annotated = result.plot()
+        _, buffer = cv2.imencode(".png", annotated)
+        annotated_b64 = base64.b64encode(buffer).decode()
+
+        responses.append({
+            "filename": filenames[idx],
+            "total_defects": len(detections),
+            "detections": detections,
+            "annotated_image": annotated_b64
+        })
+
+    return responses
