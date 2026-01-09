@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card bg-dark text-white mb-3">
+            <div class="card-header">⚙️ Configuration</div>
+            <div class="card-body">
+                <form id="uploadForm">
+                    <label class="form-label">1. Upload Images</label>
+                    <input class="form-control mb-3" type="file" id="fileInput" multiple accept=".jpg,.png,.jpeg">
+                    
+                    <label class="form-label">2. Thresholds</label>
+                    <div class="mb-2">
+                        <small>Min Confidence: <span id="confLowVal">0.25</span></small>
+                        <input type="range" class="form-range" id="confLow" min="0.1" max="1.0" step="0.05" value="0.25">
+                    </div>
+                    <div class="mb-3">
+                        <small>Max Confidence: <span id="confHighVal">1.00</span></small>
+                        <input type="range" class="form-range" id="confHigh" min="0.1" max="1.0" step="0.05" value="1.0">
+                    </div>
+
+                    <button type="button" class="btn btn-primary w-100" id="runBtn" disabled>
+                        🚀 Run Prediction
+                    </button>
+
+                    <div id="progressSection" class="mt-3 d-none">
+                        <div class="d-flex justify-content-between text-white small mb-1">
+                            <span id="progressStatus">Processing...</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress bg-secondary" style="height: 6px;">
+                            <div id="progressBar" 
+                                 class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
+                                 role="progressbar" 
+                                 style="width: 0%">
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+            </div>
+        </div>
+
+        <div class="card bg-dark text-white">
+            <div class="card-header">📊 Batch Stats</div>
+            <div class="card-body">
+                <h3 id="statTotal">0</h3>
+                <p class="text-muted">Total Processed</p>
+                <hr>
+                <h3 id="statDefects" class="text-danger">0</h3>
+                <p class="text-muted">Defects Found</p>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div id="resultsHeader" class="d-flex justify-content-between align-items-center mb-3 text-white">
+            <h4>Live Batch Results</h4>
+            <span id="loader" class="d-none badge bg-warning text-dark">Processing...</span>
+        </div>
+        
+        <div class="row g-3" id="resultsGrid">
+            
+            <div class="col-12" id="welcomeScreen">
+                <div class="p-5 mb-4 rounded-3 border border-secondary text-center shadow-lg" 
+                     style="background-color: rgba(33, 37, 41, 0.5) !important; backdrop-filter: blur(8px);">
+                    
+                    <div class="container-fluid py-3">
+                        
+                        <h1 class="display-4 fw-bold text-primary mb-2" style="text-shadow: 2px 2px 4px #000;">DeepPCB Inspector</h1>
+                        <p class="fs-4 text-white" style="text-shadow: 1px 1px 3px #000;">
+                            Automated Optical Inspection (AOI) for Printed Circuit Boards
+                        </p>
+                        
+                        <div class="mb-4">
+                            <span class="badge rounded-pill bg-dark border border-secondary mx-1 shadow-sm">🚀 Built on YOLOv8s</span>
+                            <span class="badge rounded-pill bg-dark border border-secondary mx-1 shadow-sm">⚡ Powered by Ultralytics</span>
+                            <span class="badge rounded-pill bg-dark border border-secondary mx-1 shadow-sm">🔥 PyTorch Framework</span>
+                        </div>
+
+                        <hr class="border-secondary my-4 w-75 mx-auto">
+
+                        <h5 class="text-info mb-4" style="text-shadow: 1px 1px 2px #000;">🔍 Capable of Detecting 6 Key Defect Types:</h5>
+                        <div class="row justify-content-center mb-5">
+                            <div class="col-md-11">
+                                <div class="d-flex flex-wrap justify-content-center gap-3">
+                                    <div class="p-2 border border-secondary rounded bg-dark text-white shadow" style="min-width: 140px; --bs-bg-opacity: 0.85;">
+                                        <div class="fs-4">🕳️</div>
+                                        <strong>Missing Hole</strong>
+                                    </div>
+                                    <div class="p-2 border border-secondary rounded bg-dark text-white shadow" style="min-width: 140px; --bs-bg-opacity: 0.85;">
+                                        <div class="fs-4">🐭</div>
+                                        <strong>Mouse Bite</strong>
+                                    </div>
+                                    <div class="p-2 border border-secondary rounded bg-dark text-white shadow" style="min-width: 140px; --bs-bg-opacity: 0.85;">
+                                        <div class="fs-4">🔌</div>
+                                        <strong>Open Circuit</strong>
+                                    </div>
+                                    <div class="p-2 border border-secondary rounded bg-dark text-white shadow" style="min-width: 140px; --bs-bg-opacity: 0.85;">
+                                        <div class="fs-4">⚡</div>
+                                        <strong>Short</strong>
+                                    </div>
+                                    <div class="p-2 border border-secondary rounded bg-dark text-white shadow" style="min-width: 140px; --bs-bg-opacity: 0.85;">
+                                        <div class="fs-4">🌵</div>
+                                        <strong>Spur</strong>
+                                    </div>
+                                    <div class="p-2 border border-secondary rounded bg-dark text-white shadow" style="min-width: 140px; --bs-bg-opacity: 0.85;">
+                                        <div class="fs-4">🧱</div>
+                                        <strong>Spurious Copper</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center g-4 text-white mt-2">
+                            <div class="col-md-3">
+                                <div class="p-3 border border-secondary rounded bg-dark h-100 shadow" style="--bs-bg-opacity: 0.85;">
+                                    <div class="fs-1 mb-2 text-primary">📂</div>
+                                    <h5 class="fw-bold">1. Upload</h5>
+                                    <p class="small text-muted mb-0">Select your PCB images using the panel on the left.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3 border border-secondary rounded bg-dark h-100 shadow" style="--bs-bg-opacity: 0.85;">
+                                    <div class="fs-1 mb-2 text-warning">⚙️</div>
+                                    <h5 class="fw-bold">2. Tune</h5>
+                                    <p class="small text-muted mb-0">Adjust confidence sliders to filter out weak predictions.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3 border border-secondary rounded bg-dark h-100 shadow" style="--bs-bg-opacity: 0.85;">
+                                    <div class="fs-1 mb-2 text-success">🚀</div>
+                                    <h5 class="fw-bold">3. Analyze</h5>
+                                    <p class="small text-muted mb-0">Click "Run Prediction" to visualize defects instantly.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+</div>
+{% endblock %}

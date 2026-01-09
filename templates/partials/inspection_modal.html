@@ -1,0 +1,55 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 border-end border-secondary">
+            <h5 class="mb-3">Full View: <span class="text-primary">{{ item.filename }}</span></h5>
+            <div class="position-relative d-inline-block">
+                <img src="data:image/jpeg;base64,{{ item.thumbnail }}" class="img-fluid rounded border border-secondary" alt="Main View">
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <h5 class="mb-3">Defect Analysis</h5>
+            
+            {% if item.status == 'Pass' %}
+                <div class="alert alert-success d-flex align-items-center">
+                    <span class="fs-4 me-2">✅</span> 
+                    <div>
+                        <strong>PASSED</strong><br>
+                        No defects detected.
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-danger d-flex align-items-center mb-3">
+                    <span class="fs-4 me-2">❌</span> 
+                    <div>
+                        <strong>FAILED</strong><br>
+                        {{ item.defects|length }} defect(s) found.
+                    </div>
+                </div>
+
+                <div style="max-height: 60vh; overflow-y: auto;">
+                    {% for defect in item.defects %}
+                    <div class="card bg-secondary text-white mb-3">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <strong>{{ defect.label }}</strong>
+                            <span class="badge bg-dark">{{ defect.confidence }} Conf</span>
+                        </div>
+                        <div class="card-body text-center">
+                            {% set cutout = item.cutouts[loop.index0] %}
+                            {% if cutout %}
+                                <img src="data:image/jpeg;base64,{{ cutout.image }}" class="img-thumbnail bg-dark border-0" style="max-height: 100px;">
+                            {% else %}
+                                <small class="text-muted">No crop available</small>
+                            {% endif %}
+                            
+                            <div class="mt-2 small text-muted text-start">
+                                Location: [{{ defect.bbox | join(', ') }}]
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

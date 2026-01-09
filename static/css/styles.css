@@ -1,0 +1,104 @@
+/* --- GLOBAL BACKGROUND SETTINGS --- */
+body {
+    background-color: #000;
+    /* Pure URL - No gradients/overlays mixing in */
+    background-image: url('../images/background.jpg'); 
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    
+    color: #ffffff; /* Default to white text */
+    /* Add shadow so text pops even on bright backgrounds */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); 
+    
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+/* Hide the overlay that was making things grey */
+.overlay {
+    display: none; 
+}
+
+/* --- COMPONENT STYLES --- */
+
+/* Transparent Cards */
+.card {
+    background-color: rgba(33, 37, 41, 0.8) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card.bg-dark {
+    background-color: rgba(33, 37, 41, 0.9) !important;
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Results Grid Images */
+.img-thumbnail-grid {
+    height: 150px;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* Defect Card Hover Effect */
+.defect-card {
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.defect-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+/* Status Indicators */
+.status-pass { border-bottom: 4px solid #198754; }
+.status-fail { border-bottom: 4px solid #dc3545; }
+
+
+/* --- GLOBAL TEXT VISIBILITY FIXES (OVERRIDES BOOTSTRAP) --- */
+
+/* 1. Force all basic typography to be White */
+h1, h2, h3, h4, h5, h6, p, span, div, li {
+    color: #ffffff;
+}
+
+/* 2. Fix Bootstrap's '.text-muted' class (Change dark grey to light silver) */
+.text-muted {
+    color: #d0d0d0 !important; 
+}
+
+/* 3. Fix Form Labels */
+.form-label, label {
+    color: #ffffff !important;
+    font-weight: 500;
+    text-shadow: 1px 1px 2px #000;
+}
+
+/* 4. Smart Table Headers */
+
+/* Default: All table headers should be WHITE (Fixes Confusion Matrix) */
+.table thead th {
+    color: #ffffff !important;
+    border-color: #444; /* Adds a subtle border so you can see the grid */
+}
+
+/* Exception: If the header has a light background (like in Reports), make text BLACK */
+.table-secondary th, .table-light th {
+    color: #000000 !important;
+}
+
+/* 5. Ensure Card Text is always White */
+.card-body, .card-header, .card-footer {
+    color: #ffffff !important;
+}
+
+/* 6. Fix "Small" text elements */
+small {
+    color: #e0e0e0 !important;
+}

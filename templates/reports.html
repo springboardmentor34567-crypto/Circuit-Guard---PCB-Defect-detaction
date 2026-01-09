@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid text-white">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+        <div>
+            <h2>📝 Inspection Report</h2>
+            <p class="text-muted mb-0">Review batch results before exporting.</p>
+        </div>
+        
+        {% if count > 0 %}
+        <a href="{{ url_for('reports.download') }}" class="btn btn-success">
+            ⬇️ Download Full Report (ZIP)
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="card bg-dark border-secondary shadow-lg">
+        <div class="card-body p-0">
+            
+            {% if count > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover table-striped mb-0 align-middle">
+                        <thead class="table-secondary text-dark">
+                            <tr>
+                                <th scope="col" class="ps-4">Image Filename</th>
+                                <th scope="col" class="text-center">Status</th>
+                                <th scope="col">Defects Detected</th>
+                                <th scope="col">Confidence Scores</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in results %}
+                            <tr>
+                                <td class="ps-4 fw-bold text-info">{{ item.filename }}</td>
+                                
+                                <td class="text-center">
+                                    {% if item.status == 'Fail' %}
+                                        <span class="badge bg-danger">FAIL</span>
+                                    {% else %}
+                                        <span class="badge bg-success">PASS</span>
+                                    {% endif %}
+                                </td>
+                                
+                                <td>
+                                    {% if item.defects %}
+                                        {% for d in item.defects %}
+                                            <span class="badge bg-secondary border border-secondary mb-1">
+                                                {{ d.label }}
+                                            </span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted small">No defects</span>
+                                    {% endif %}
+                                </td>
+                                
+                                <td>
+                                    {% if item.defects %}
+                                        {% for d in item.defects %}
+                                            <small class="d-block text-muted">
+                                                {{ d.label }}: <span class="text-white">{{ d.confidence }}</span>
+                                            </small>
+                                        {% endfor %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <div class="mb-3 fs-1">📂</div>
+                    <h4 class="text-white">No Reports Available</h4>
+                    <p class="text-muted">Upload images and run a prediction to generate a report.</p>
+                    <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-primary mt-2">
+                        Go to Dashboard
+                    </a>
+                </div>
+            {% endif %}
+
+        </div>
+        
+        {% if count > 0 %}
+        <div class="card-footer border-secondary text-end text-muted small">
+            Total Records: {{ count }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

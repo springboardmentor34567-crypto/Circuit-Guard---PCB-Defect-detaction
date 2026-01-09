@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-white mb-0">📂 Scan History</h2>
+            <p class="text-muted">View past inspection results and database records.</p>
+        </div>
+        
+        {% if scans %}
+        <button id="clearBtn" class="btn btn-danger shadow-sm">
+            <i class="bi bi-trash"></i> 🗑️ Clear All History
+        </button>
+        {% endif %}
+    </div>
+
+    <div class="card bg-dark text-white border-secondary shadow">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0 align-middle">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Filename</th>
+                            <th scope="col">Date & Time</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Confidence</th>
+                            <th scope="col">Defect Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if scans %}
+                            {% for scan in scans %}
+                            <tr>
+                                <td>#{{ scan.id }}</td>
+                                <td>
+                                    <span class="fw-bold">{{ scan.filename }}</span>
+                                </td>
+                                <td class="text-muted">{{ scan.timestamp }}</td>
+                                
+                                <td>
+                                    {% if scan.status == 'Pass' %}
+                                        <span class="badge bg-success rounded-pill">✅ PASS</span>
+                                    {% else %}
+                                        <span class="badge bg-danger rounded-pill">❌ FAIL</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if scan.confidence %}
+                                        {{ (scan.confidence * 100) | round(1) }}%
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </td>
+                                
+                                <td>
+                                    {% if scan.defects_count %}
+                                        <span class="badge bg-secondary">{{ scan.defects_count }} Defects</span>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <div class="text-muted">
+                                        <h4>📭 No History Found</h4>
+                                        <p>Run some predictions to see results here.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const clearBtn = document.getElementById('clearBtn');
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', async function() {
+            // 1. Confirm with user
+            if (!confirm("⚠️ Are you sure? This will PERMANENTLY delete all scan records from the database.")) {
+                return;
+            }
+
+            // 2. Disable button to prevent double-click
+            const originalText = this.innerHTML;
+            this.disabled = true;
+            this.innerHTML = "⏳ Deleting...";
+
+            try {
+                // 3. Send Request to Backend
+                const response = await fetch('/history/clear', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // 4. Success: Reload Page
+                    alert("✅ Database Cleared Successfully!");
+                    window.location.reload();
+                } else {
+                    // 5. Server Error
+                    alert("❌ Error: " + (data.error || "Unknown error occurred"));
+                    this.disabled = false;
+                    this.innerHTML = originalText;
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("❌ Failed to connect to server.");
+                this.disabled = false;
+                this.innerHTML = originalText;
+            }
+        });
+    }
+</script>
+{% endblock %}
