@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PCB Details</title>
+  <link rel="stylesheet" href="/frontend/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+</head>
+<body>
+
+<h2 id="fileName"></h2>
+
+<div class="image-row">
+  <img id="origImg">
+  <img id="annotImg">
+</div>
+
+<div class="stats">
+  <div>Top Confidence<br><span id="conf"></span></div>
+  <div>Defect Count<br><span id="defects"></span></div>
+  <div>Inference (ms)<br><span id="time"></span></div>
+</div>
+
+<div class="charts">
+  <div id="barChart"></div>
+  <div id="pieChart"></div>
+</div>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Label</th>
+        <th>Confidence</th>
+        <th>BBox</th>
+      </tr>
+    </thead>
+    <tbody id="defectTable"></tbody>
+  </table>
+</div>
+
+<a id="pdfLink">⬇ Download PDF</a>
+<a id="jsonLink">⬇ Download JSON</a>
+
+<script src="/frontend/js/details.js"></script>
+</body>
+</html>
