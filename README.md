@@ -1,123 +1,197 @@
-PROJECT_NAME: CircuitGuard – Intelligent PCB Defect Detection System
+One help indha read me filemm add pannira 
+🛡️ Circuit Guard – PCB Defect Detection System
+📌 Project Overview
 
-OVERVIEW:
-CircuitGuard is a production-oriented PCB defect detection system designed
-to demonstrate real-world deployment of deep learning models.
-The system integrates a YOLO-based computer vision model with a FastAPI backend
-and a Streamlit frontend to deliver an end-to-end defect inspection pipeline.
-It enables automated quality inspection, visual analytics, and report generation
-for printed circuit boards (PCBs).
+Circuit Guard is an intelligent PCB (Printed Circuit Board) defect detection system that uses deep learning (YOLOv8) to automatically identify and localize manufacturing defects in PCB images.
+The system helps improve quality control by reducing manual inspection effort, increasing accuracy, and enabling faster defect detection.
 
-KEY_HIGHLIGHTS:
-- End-to-end ML system (Frontend + Backend + Model)
-- Clear client–server separation using REST APIs
-- Real-time defect detection with visual feedback
-- Industry-style deployment workflow
-- Scalable and modular architecture
+This project provides an end-to-end pipeline including dataset preparation, model training, evaluation, and a web-based interface for real-time defect detection.
 
-TECHNOLOGY_STACK:
-- Programming Language: Python 3.11
-- Deep Learning Model: YOLO (Ultralytics)
-- Backend Framework: FastAPI
-- Frontend Framework: Streamlit
-- Image Processing: OpenCV, PIL
-- Server: Uvicorn
-- Version Control: Git, GitHub (LFS enabled for model files)
+🎯 Objectives
 
-SUPPORTED_DEFECT_TYPES:
-- Missing Hole
-- Mouse Bite
-- Open Circuit
-- Short Circuit
-- Spur
-- Spurious Copper
+Detect PCB defects accurately using computer vision
 
-SYSTEM_ARCHITECTURE:
-User
- → Streamlit Frontend (UI & Visualization)
- → REST API (HTTP POST /predict)
- → FastAPI Backend (Inference Engine)
- → YOLO Model (best.pt)
- → JSON Response + Annotated Outputs
- → Frontend Dashboard & Downloads
+Reduce manual inspection time and human errors
 
-PROJECT_STRUCTURE:
-CircuitGuard/
-├── app.py                     # Streamlit frontend application
-├── pcb-defect-backend/
-│   ├── main.py                # FastAPI backend service
-│   ├── model/
-│   │   └── best.pt            # Trained YOLO model (LFS tracked)
-│   └── uploads/               # Images stored by backend for traceability
-├── screenshots/               # Application UI screenshots
+Classify multiple PCB defect types
+
+Provide a user-friendly interface for defect visualization
+
+Generate reliable performance metrics for evaluation
+
+🧠 Defects Detected
+
+The model detects the following PCB defects:
+
+Missing Hole
+
+Mouse Bite
+
+Open Circuit
+
+Short
+
+Spur
+
+Spurious Copper
+
+🏗️ Project Architecture
+Circuit Guard
+│
+├── dataset/
+│   ├── images/
+│   │   ├── train/
+│   │   ├── val/
+│   │   └── test/
+│   ├── labels/
+│
+├── model/
+│   ├── yolov8n.pt
+│   └── best.pt
+│
+├── training/
+│   ├── train.py
+│   ├── data.yaml
+│
+├── evaluation/
+│   ├── metrics.csv
+│   ├── confusion_matrix.png
+│
+├── frontend/
+│   ├── app.py
+│   ├── templates/
+│   └── static/
+│
+├── results/
+│   ├── detected_images/
+│
 ├── requirements.txt
-├── packages.txt
-├── runtime.txt
 └── README.md
 
-FRONTEND_CAPABILITIES:
-- Upload single or multiple PCB images
-- Sends images to backend via REST API
-- Displays original and annotated images
-- Visualizes defect statistics (bar & donut charts)
-- Enables export of annotated images and reports
+🛠️ Technologies Used
 
-BACKEND_CAPABILITIES:
-- Accepts images via POST /predict endpoint
-- Saves uploaded images for verification and audit
-- Executes YOLO inference on the backend
-- Returns structured JSON responses to the frontend
+Programming Language: Python
 
-API_SPECIFICATION:
-Endpoint: POST /predict
-Input:
-- Multipart form-data
-- Image file (PNG, JPG, JPEG)
+Deep Learning Framework: PyTorch
 
-Sample_Response:
-{
-  "status": "success",
-  "defects_detected": {
-    "spur": 1
-  },
-  "total_defects": 1
-}
+Object Detection Model: YOLOv8 (Ultralytics)
 
-MODEL_INFORMATION:
-Model_Name: YOLO (Ultralytics)
-Input_Type: PCB top-view images
-Performance_Metrics:
-- mAP@50: 0.98
-- Precision: 0.97
-- Recall: 0.97
+Image Processing: OpenCV
 
-INTEGRATION_PROOF:
-- Images uploaded from the frontend are saved in:
-  pcb-defect-backend/uploads/
-- Inference is executed exclusively in the backend
-- Results are returned via REST API and rendered in frontend
-- Confirms true frontend–backend communication (not local-only execution)
+Web Framework: Flask / Gradio
 
-KNOWN_LIMITATIONS:
-- Some visualization logic remains frontend-driven
-- Backend response metadata can be extended further
-- Current setup is optimized for single-node inference
+Visualization: Matplotlib
 
-FUTURE_ENHANCEMENTS:
-- Fully backend-driven annotation rendering
-- Database integration for inspection history
-- User authentication and access control
-- Containerization using Docker
-- Cloud deployment (AWS / Azure / GCP)
-- Asynchronous batch processing for large-scale inspection
+Dataset Annotation: YOLO format
 
-AUTHOR:
-Name: Prashant Yadav
-Degree: B.Tech – Computer Science & Engineering (Artificial Intelligence)
-Project_Type: Internship / Applied Machine Learning Project
+⚙️ Installation & Setup
+1️⃣ Clone the Repository
+git clone https://github.com/your-username/circuit-guard.git
+cd circuit-guard
 
-PROJECT_GOAL:
-To demonstrate practical deployment of a computer vision model
-in a real-world, production-style architecture with clean
-engineering practices and scalable design.
+2️⃣ Install Dependencies
+pip install -r requirements.txt
 
+3️⃣ Verify Installation
+python -c "from ultralytics import YOLO; print('YOLOv8 Installed Successfully')"
+
+🚀 Model Training
+
+To train the YOLOv8 model:
+
+python train.py
+
+
+Training includes:
+
+Data loading
+
+Image augmentation
+
+Loss optimization
+
+Validation after each epoch
+
+📊 Model Evaluation
+
+Performance is evaluated using:
+
+mAP@50
+
+Precision
+
+Recall
+
+Confusion Matrix
+
+Sample Results
+Defect Class	mAP@50
+Missing Hole	0.9886
+Mouse Bite	0.9793
+Open Circuit	0.9711
+Short	0.9646
+Spur	0.9570
+Spurious Copper	0.9511
+🌐 Web Application
+
+The web interface allows users to:
+
+Upload PCB images
+
+Run defect detection
+
+View bounding boxes and labels
+
+Download results
+
+To launch the web app:
+
+python app.py
+
+📸 Sample Output
+
+Original PCB image
+
+Bounding box annotated image
+
+Defect class labels with confidence scores
+
+🔐 Advantages
+
+High accuracy and reliability
+
+Fast real-time inference
+
+Scalable for industrial applications
+
+Easy to use and deploy
+
+🚧 Limitations
+
+Performance depends on dataset quality
+
+Requires GPU for faster training
+
+Limited to predefined defect classes
+
+🔮 Future Enhancements
+
+Integrate SAM for precise defect segmentation
+
+Add real-time camera inspection
+
+Cloud deployment
+
+Defect severity analysis
+
+Automated report generation
+
+👨‍💻 Author
+
+Prasanna Kumar
+Department of Computer Science / AI
+Project: Final Year / Academic Project
+
+📜 License
+
+This project is for academic and research purposes only.
