@@ -1,4 +1,3 @@
-One help indha read me filemm add pannira 
 🛡️ Circuit Guard – PCB Defect Detection System
 📌 Project Overview
 
@@ -195,3 +194,4 @@ Project: Final Year / Academic Project
 📜 License
 
 This project is for academic and research purposes only.
+
