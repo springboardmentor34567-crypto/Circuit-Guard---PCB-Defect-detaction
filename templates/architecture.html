@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5 text-white">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">System Architecture</h1>
+        <p class="lead text-muted">Technical Breakdown of the DeepPCB Inference Pipeline</p>
+    </div>
+
+    <div class="card bg-dark border-secondary shadow-lg mb-5">
+        <div class="card-header border-secondary">
+            <h4 class="mb-0">🔄 End-to-End Inference Pipeline</h4>
+        </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center text-center d-none d-md-flex">
+                <div class="px-3">
+                    <div class="fs-1 mb-2">📷</div>
+                    <h5>Input Image</h5>
+                    <small class="text-muted">Raw JPG/PNG</small>
+                </div>
+                <div class="fs-2 text-muted">→</div>
+                <div class="px-3">
+                    <div class="fs-1 mb-2">🔧</div>
+                    <h5>Preprocessing</h5>
+                    <small class="text-muted">Resize (1024 x 1024)<br>Normalization</small>
+                </div>
+                <div class="fs-2 text-muted">→</div>
+                <div class="px-3">
+                    <div class="fs-1 mb-2">🧠</div>
+                    <h5>YOLOv8 Backbone</h5>
+                    <small class="text-muted">CSPDarknet53<br>Feature Extraction</small>
+                </div>
+                <div class="fs-2 text-muted">→</div>
+                <div class="px-3">
+                    <div class="fs-1 mb-2">🎯</div>
+                    <h5>Detection Head</h5>
+                    <small class="text-muted">Bounding Box<br>Class Probability</small>
+                </div>
+                <div class="fs-2 text-muted">→</div>
+                <div class="px-3">
+                    <div class="fs-1 mb-2">🧹</div>
+                    <h5>NMS</h5>
+                    <small class="text-muted">Non-Max Suppression<br>Filter Duplicates</small>
+                </div>
+            </div>
+            <div class="d-md-none">
+                <ul class="list-group list-group-flush bg-transparent">
+                    <li class="list-group-item bg-transparent text-white">1. Input Image (Raw Data)</li>
+                    <li class="list-group-item bg-transparent text-white">2. Preprocessing (Resize to 1024 x 1024)</li>
+                    <li class="list-group-item bg-transparent text-white">3. Feature Extraction (YOLOv8 Backbone)</li>
+                    <li class="list-group-item bg-transparent text-white">4. Output (BBox + Confidence)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card bg-dark border-secondary h-100 shadow">
+                <div class="card-header border-secondary text-info">
+                    <h5 class="mb-0">🧠 Model Specifications</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush bg-transparent">
+                        <li class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between">
+                            <span>Base Architecture</span>
+                            <span class="badge bg-primary">YOLOv8s (Small)</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between">
+                            <span>Input Resolution</span>
+                            <span class="badge bg-secondary">1024 x 1024 px</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between">
+                            <span>Training Epochs</span>
+                            <span class="badge bg-secondary">25</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between">
+                            <span>Dataset Size</span>
+                            <span class="badge bg-secondary">~1500 Images</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between">
+                            <span>Inference Speed</span>
+                            <span class="badge bg-success">~18ms (T4 GPU)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card bg-dark border-secondary h-100 shadow">
+                <div class="card-header border-secondary text-warning">
+                    <h5 class="mb-0">📐 Network Design</h5>
+                </div>
+                <div class="card-body text-center">
+                    
+                    <div class="bg-black p-4 rounded border border-secondary mb-3">
+                         <img src="https://raw.githubusercontent.com/ultralytics/assets/main/yolov8/yolo-comparison-plots.png" alt="YOLO Architecture" class="img-fluid opacity-75">
+                         <p class="small text-muted mt-2">YOLOv8 Cross Stage Partial (CSP) Network Structure</p>
+                    </div>
+                    <p class="card-text small text-muted text-start">
+                        The model utilizes a <strong>Pyramid Attention Network (PANet)</strong> for feature aggregation, allowing it to detect small defects (like Mouse Bites) and large ones (like Shorts) simultaneously.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

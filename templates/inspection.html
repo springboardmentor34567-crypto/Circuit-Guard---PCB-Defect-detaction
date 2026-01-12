@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 text-white">
+    <h2>🔍 Visual Inspection</h2>
+    <form class="d-flex" action="/inspection/" method="GET">
+        <input class="form-control me-2" type="search" name="search" placeholder="Search filename or defect..." value="{{ search_query }}" aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+    </form>
+</div>
+
+<div class="row g-4">
+    {% if results %}
+        {% for item in results %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card bg-dark text-white border-secondary h-100 defect-card" 
+                 onclick="openInspectionModal('{{ item.filename }}')">
+                
+                <img src="data:image/jpeg;base64,{{ item.thumbnail }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="PCB Image">
+                
+                <div class="card-body">
+                    <h6 class="card-title text-truncate">{{ item.filename }}</h6>
+                    
+                    {% if item.status == 'Fail' %}
+                        <span class="badge bg-danger">❌ Fail ({{ item.defects|length }})</span>
+                    {% else %}
+                        <span class="badge bg-success">✅ Pass</span>
+                    {% endif %}
+                    
+                    <div class="mt-2 text-muted small text-truncate">
+                        {% for d in item.defects %}
+                            {{ d.label }} 
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12 text-center text-muted mt-5">
+            <h4>No images found matching your criteria.</h4>
+        </div>
+    {% endif %}
+</div>
+
+<div class="modal fade" id="inspectionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Inspection Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // AJAX Logic to fetch details
+    async function openInspectionModal(fileId) {
+        const modalEl = document.getElementById('inspectionModal');
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+
+        const contentDiv = document.getElementById('modalContent');
+        contentDiv.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+
+        try {
+            // Fetch the partial HTML from the server
+            const response = await fetch(`/inspection/item/${fileId}`);
+            const html = await response.text();
+            contentDiv.innerHTML = html;
+        } catch (error) {
+            contentDiv.innerHTML = '<div class="alert alert-danger">Error loading details.</div>';
+        }
+    }
+</script>
+{% endblock %}
