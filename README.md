@@ -1,123 +1,159 @@
-PROJECT_NAME: CircuitGuard – Intelligent PCB Defect Detection System
+<h1 align="center"> ♨︎ CircuitGuide ♨︎ </h1>
+<h3 align="center">AI-Based PCB Defect Detection System</h3>
 
-OVERVIEW:
-CircuitGuard is a production-oriented PCB defect detection system designed
-to demonstrate real-world deployment of deep learning models.
-The system integrates a YOLO-based computer vision model with a FastAPI backend
-and a Streamlit frontend to deliver an end-to-end defect inspection pipeline.
-It enables automated quality inspection, visual analytics, and report generation
-for printed circuit boards (PCBs).
+<p align="center">
+  <b>Detect • Analyze • Improve PCB Quality using AI</b>
+</p>
 
-KEY_HIGHLIGHTS:
-- End-to-end ML system (Frontend + Backend + Model)
-- Clear client–server separation using REST APIs
-- Real-time defect detection with visual feedback
-- Industry-style deployment workflow
-- Scalable and modular architecture
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=white"/>
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white"/>
+  <img src="https://img.shields.io/badge/YOLOv8-FF6F00?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Computer%20Vision-000000?style=for-the-badge"/>
+</p>
 
-TECHNOLOGY_STACK:
-- Programming Language: Python 3.11
-- Deep Learning Model: YOLO (Ultralytics)
-- Backend Framework: FastAPI
-- Frontend Framework: Streamlit
-- Image Processing: OpenCV, PIL
-- Server: Uvicorn
-- Version Control: Git, GitHub (LFS enabled for model files)
+---
 
-SUPPORTED_DEFECT_TYPES:
-- Missing Hole
-- Mouse Bite
-- Open Circuit
-- Short Circuit
-- Spur
-- Spurious Copper
+## 🧠 About CircuitGuide
 
-SYSTEM_ARCHITECTURE:
-User
- → Streamlit Frontend (UI & Visualization)
- → REST API (HTTP POST /predict)
- → FastAPI Backend (Inference Engine)
- → YOLO Model (best.pt)
- → JSON Response + Annotated Outputs
- → Frontend Dashboard & Downloads
+CircuitGuide is an **AI-powered PCB defect detection system** that automatically identifies defects in Printed Circuit Boards using **Deep Learning and Computer Vision**.
 
-PROJECT_STRUCTURE:
-CircuitGuard/
-├── app.py                     # Streamlit frontend application
-├── pcb-defect-backend/
-│   ├── main.py                # FastAPI backend service
-│   ├── model/
-│   │   └── best.pt            # Trained YOLO model (LFS tracked)
-│   └── uploads/               # Images stored by backend for traceability
-├── screenshots/               # Application UI screenshots
-├── requirements.txt
-├── packages.txt
-├── runtime.txt
-└── README.md
+The goal of this project is to reduce manual inspection effort and improve accuracy in industrial PCB quality control.
 
-FRONTEND_CAPABILITIES:
-- Upload single or multiple PCB images
-- Sends images to backend via REST API
-- Displays original and annotated images
-- Visualizes defect statistics (bar & donut charts)
-- Enables export of annotated images and reports
+---
 
-BACKEND_CAPABILITIES:
-- Accepts images via POST /predict endpoint
-- Saves uploaded images for verification and audit
-- Executes YOLO inference on the backend
-- Returns structured JSON responses to the frontend
+## 🎯 Problem Statement
 
-API_SPECIFICATION:
-Endpoint: POST /predict
-Input:
-- Multipart form-data
-- Image file (PNG, JPG, JPEG)
+Manual PCB inspection:
+- ⏱️ Takes a lot of time  
+- ❌ Is prone to human error  
+- 💸 Increases manufacturing cost  
 
-Sample_Response:
-{
-  "status": "success",
-  "defects_detected": {
-    "spur": 1
-  },
-  "total_defects": 1
-}
+CircuitGuide solves this problem by using an AI model to detect defects automatically from PCB images.
 
-MODEL_INFORMATION:
-Model_Name: YOLO (Ultralytics)
-Input_Type: PCB top-view images
-Performance_Metrics:
-- mAP@50: 0.98
-- Precision: 0.97
-- Recall: 0.97
+---
 
-INTEGRATION_PROOF:
-- Images uploaded from the frontend are saved in:
-  pcb-defect-backend/uploads/
-- Inference is executed exclusively in the backend
-- Results are returned via REST API and rendered in frontend
-- Confirms true frontend–backend communication (not local-only execution)
+## 🚀 Features
 
-KNOWN_LIMITATIONS:
-- Some visualization logic remains frontend-driven
-- Backend response metadata can be extended further
-- Current setup is optimized for single-node inference
+- 🔍 Automatic detection of PCB defects  
+- 🧠 YOLO-based deep learning model  
+- ⚡ FastAPI backend for inference  
+- 📸 Image upload and annotated output  
+- 📊 Defect count summary  
+- 📍 Defect location table  
+- ⬇️ Download annotated images and reports  
 
-FUTURE_ENHANCEMENTS:
-- Fully backend-driven annotation rendering
-- Database integration for inspection history
-- User authentication and access control
-- Containerization using Docker
-- Cloud deployment (AWS / Azure / GCP)
-- Asynchronous batch processing for large-scale inspection
+---
 
-AUTHOR:
-Name: Prashant Yadav
-Degree: B.Tech – Computer Science & Engineering (Artificial Intelligence)
-Project_Type: Internship / Applied Machine Learning Project
+## 🛠️ Tech Stack
 
-PROJECT_GOAL:
-To demonstrate practical deployment of a computer vision model
-in a real-world, production-style architecture with clean
-engineering practices and scalable design.
+**Programming Language**  
+- Python  
+
+**AI / Machine Learning**  
+- YOLOv8  
+- OpenCV  
+- NumPy  
+- Pandas  
+
+**Backend**  
+- FastAPI  
+- Uvicorn  
+
+---
+
+## 🧩 System Architecture
+PCB Image Upload
+     ↓
+FastAPI Backend
+     ↓
+YOLO Defect Detection Model
+     ↓
+Annotated Image + Defect Data
+     ↓
+Download Results
+
+
+---
+
+## 📸 Screenshots
+
+### 🔹 Input PCB Image
+![Input PCB](1.png)
+
+### 🔹 Defect Detection Output
+![Detection Output](2.png)
+
+---
+
+## ⚙️ How to Run the Project
+
+Clone the repository  
+`git clone https://github.com/prashantyadav12/CircuitGuide-PCB_Defect_Detection.git`
+
+Move into project folder  
+`cd CircuitGuide-PCB_Defect_Detection`
+
+Create virtual environment  
+`python -m venv venv`
+
+Activate virtual environment (Windows)  
+`venv\Scripts\activate`
+
+Activate virtual environment (Mac/Linux)  
+`source venv/bin/activate`
+
+Install dependencies  
+`pip install -r requirements.txt`
+
+Run FastAPI server  
+`uvicorn main:app --reload`
+
+Open Swagger Docs  
+`http://127.0.0.1:8000/docs`
+
+---
+
+## 🌐 API Endpoints
+
+- `GET /` → Health check  
+- `POST /detect` → Upload PCB image for defect detection  
+
+---
+
+## 📊 Project Outcome
+
+- ✔ Accurate multi-defect detection  
+- ✔ Fast inference speed  
+- ✔ Clear visual results  
+- ✔ Industry-oriented workflow  
+
+---
+
+## 🔮 Future Enhancements
+
+- Web frontend dashboard  
+- Cloud deployment  
+- Live camera inspection  
+- Defect severity analysis  
+- Analytics and reporting  
+
+---
+
+## 👨‍💻 Author
+
+**Prashant Yadav**  
+Computer Science (AI) Student  
+AI • Backend • System Integration  
+
+🔗 LinkedIn:  
+https://www.linkedin.com/in/prashant-yadav-638684298/
+
+---
+
+<p align="center">
+  <img src="https://visitcount.itsvg.in/api?id=circuitguide&label=Project%20Views&color=0&pretty=true"/>
+</p>
+
+
 
