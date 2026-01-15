@@ -76,22 +76,11 @@ Download Results
 
 ---
 
-## 📸 Screenshots
-
-### 🔹 Input PCB Image
-![Input PCB](screenshots/1.png)
+### 🔹 Frontend Screenshot
+![Frontend](1.png)
 
 ### 🔹 Defect Detection Output
-![Detection Output](screenshots/2.png)
-
-### 🔹 Annotated PCB with Bounding Boxes
-![Annotated PCB](screenshots/6.png)
-
-### 🔹 Defect Count & Location Table
-![Defect Table](screenshots/7.png)
-
-### 🔹 Streamlit / UI View
-![UI View](screenshots/8.png)
+![Detection Output](2.png)
 
 ---
 
@@ -163,6 +152,7 @@ https://www.linkedin.com/in/prashant-yadav-638684298/
 <p align="center">
   <img src="https://visitcount.itsvg.in/api?id=circuitguide&label=Project%20Views&color=0&pretty=true"/>
 </p>
+
 
 
 
